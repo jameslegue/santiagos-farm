@@ -49,7 +49,7 @@ const game = {
   openSeeds() { this.go(new SeedsScene(this)); },
   openHeroes() { this.go(new HeroesScene(this)); },
   openPacket(crop) { this.go(new PacketScene(this, crop)); },
-  reset() { this.progress = structuredClone(NEW_GAME); this.saveProgress(); this.toTitle(); },
+  reset() { this.progress = JSON.parse(JSON.stringify(NEW_GAME)); this.saveProgress(); this.toTitle(); },
 };
 
 setMuted(game.settings.muted);

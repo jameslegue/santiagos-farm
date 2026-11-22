@@ -60,6 +60,20 @@
       });
     }
   </script>
+  <script>
+    // If the game can't start (old browser, a file didn't load), say why instead of showing a blank screen.
+    (() => {
+      const errs = [];
+      addEventListener('error', (e) => errs.push(`${e.message || 'load error'} ${(e.filename || e.target?.src || '').split('/').pop()}${e.lineno ? ':' + e.lineno : ''}`), true);
+      setTimeout(() => {
+        if (window.__game) return;
+        const d = document.createElement('div');
+        d.style.cssText = 'color:#ffcd75;font:16px monospace;padding:16px;max-width:420px;line-height:1.4';
+        d.textContent = `The farm didn't start. Screenshot this for Dad: ${errs.join(' | ') || 'no error reported'} -- ${navigator.userAgent}`;
+        document.body.prepend(d);
+      }, 5000);
+    })();
+  </script>
   <script type="module" src="src/main.js"></script>
 </body>
 </html>
