@@ -15,6 +15,9 @@ const FIELD_TOP = 58, FIELD_BOTTOM = 200;
 const PACKET_BTN = { x: 4, y: 204, w: 40, h: 48 };
 const NEXT_BTN = { x: 48, y: 204, w: 92, h: 48 };
 const RAIN_EVERY = 60 * 75; // frames between rain showers
+const HOME = { x: 84, y: 34 };   // where the tractor parks, by the barn
+const SPEED = 4;                 // tractor speed (pixels per frame)
+const spot = (i) => ({ x: plotX(i) + PW / 2 - 15, y: plotY(i) + PH - 24 });
 
 export const emptyPlots = () => Array.from({ length: COLS * ROWS }, () => null);
 
@@ -28,6 +31,9 @@ export class FarmScene {
     this.rain = null;
     this.rainTimer = RAIN_EVERY;
     this.saveTimer = 0;
+    // Santiago drives his tractor to each plot you tap, in order, and does the job there.
+    this.tractor = { x: HOME.x, y: HOME.y, flip: false, moving: false, idle: 0, wheel: 0 };
+    this.queue = [];
     playSong('farm');
   }
 
@@ -54,14 +60,39 @@ export class FarmScene {
     if (tapped(input, PACKET_BTN) || tapped(input, NEXT_BTN)) { sfx.blip(); this.game.openSeeds(); return; }
 
     for (let i = 0; i < COLS * ROWS; i++) {
-      if (input.tapIn(plotX(i) - 1, plotY(i) - 1, PW + 2, PH + 2)) { this.tapPlot(i, now); break; }
+      if (input.tapIn(plotX(i) - 1, plotY(i) - 1, PW + 2, PH + 2)) {
+        if (!this.queue.includes(i)) { this.queue.push(i); sfx.select(); }
+        break;
+      }
     }
+    this.updateTractor(now);
 
     this.updateRain(now);
     this.fx = this.fx.filter((f) => { f.t++; return f.t < f.life; });
     if (this.shownCoins < this.p.coins) this.shownCoins = Math.min(this.p.coins, this.shownCoins + Math.max(1, Math.ceil((this.p.coins - this.shownCoins) / 10)));
     else this.shownCoins = this.p.coins;
     if (++this.saveTimer > 300) { this.saveTimer = 0; this.save(); }
+  }
+
+  updateTractor(now) {
+    const tr = this.tractor;
+    let target = null;
+    if (this.queue.length) { target = spot(this.queue[0]); tr.idle = 0; }
+    else if (++tr.idle > 90) target = HOME;
+    tr.moving = false;
+    if (!target) return;
+    const dx = target.x - tr.x, dy = target.y - tr.y;
+    const d = Math.hypot(dx, dy);
+    if (d <= SPEED) {
+      tr.x = target.x; tr.y = target.y;
+      if (this.queue.length) this.tapPlot(this.queue.shift(), now);
+      return;
+    }
+    tr.x += (dx / d) * SPEED;
+    tr.y += (dy / d) * SPEED;
+    if (Math.abs(dx) > 1) tr.flip = dx < 0;
+    tr.moving = true;
+    tr.wheel++;
   }
 
   tapPlot(i, now) {
@@ -148,6 +179,14 @@ export class FarmScene {
     r.rect(0, FIELD_TOP, r.W, FIELD_BOTTOM - FIELD_TOP, 'G');
     for (let y = FIELD_TOP + 3; y < FIELD_BOTTOM; y += 7) for (let x = (y * 7) % 11; x < r.W; x += 13) r.rect(x, y, 1, 2, 'L');
     for (let i = 0; i < COLS * ROWS; i++) this.drawPlot(r, i);
+    // plots waiting for the tractor get a yellow outline
+    for (const i of this.queue) {
+      const x = plotX(i), y = plotY(i);
+      r.rect(x - 1, y - 1, PW + 2, 1, 'Y'); r.rect(x - 1, y + PH, PW + 2, 1, 'Y');
+      r.rect(x - 1, y, 1, PH, 'Y'); r.rect(x + PW, y, 1, PH, 'Y');
+    }
+    const tr = this.tractor;
+    r.spr(SPR.tractor[(tr.wheel >> 2) % 2], tr.x, tr.y - (tr.moving && (this.t >> 2) % 2 ? 1 : 0), tr.flip);
 
     if (this.rain) {
       const rx = Math.round(this.rain.x);

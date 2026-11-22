@@ -14,7 +14,10 @@ It starts with a **Legendary Strawberry Seed** packet (straight from his drawing
 8. Tomato
 9. Lettuce
 
+Santiago drives his red tractor around the farm (like the picture on the wall - `docs/tractor-picture.jpg`) and does all the work.
+
 ## How to play
+- Tap plots and Santiago drives his tractor to each one, in order (waiting plots glow yellow). When he's done he parks by the barn
 - Tap dirt to plant your seed
 - Tap the water drop to water it - it grows a step each time
 - Tap the fruit when it's ready to pick it and get coins
@@ -41,9 +44,10 @@ Offline: `sw.js` caches the game so it works from the home screen with no signal
 Same engine as Sophia's Garden - plain JavaScript modules + an HTML canvas at 144x256, scaled up in whole pixels so it stays crisp. One 16-color palette (`src/engine/palette.js`), all art is text grids of palette letters (`src/sprites.js`).
 
 - **Seeds are data:** `src/crops.js` - order, price, grow time and sell value for each seed. Tweak the numbers there to make the game faster/slower.
-- `src/scenes/` - `title.js`, `farm.js` (plant/water/pick, rain), `seeds.js` (packet picker + shop), `packet.js` (rip open a new packet)
+- `src/scenes/` - `title.js`, `farm.js` (tractor, plant/water/pick, rain), `seeds.js` (packet picker + shop), `packet.js` (rip open a new packet)
 - `src/ui/packet.js` - the seed packet look from his drawing (hang hole, circled number, green writing, LEGENDARY down the side)
 
 ## Roadmap
 1. ✅ The farm - 9 seeds in his order, Legendary Strawberry packet, plant/water/pick, coins, buy packets, golden strawberries, rain, sound, offline install
-2. His next drawing - ideas to ask him about: a farmer (him?) or a pet, animals, a bigger farm, sprinklers, a market to sell at, what the other seeds' rarities are
+2. ✅ Santiago on his red tractor - drives to each plot you tap
+3. His next drawing - ideas to ask him about: the dog, cat and chickens from the tractor picture, a Christmas wreath on the tractor, animals, a bigger farm, sprinklers, a market to sell at, what the other seeds' rarities are

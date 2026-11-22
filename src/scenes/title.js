@@ -46,12 +46,11 @@ export class TitleScene {
       r.spr(i < unlocked ? CROP[c.id] : CROP_DARK[c.id], x, 132 + hop);
     });
 
-    // the legendary strawberry, big and bouncy
-    const bob = Math.round(Math.sin(this.t / 12) * 3);
-    r.spr(CROP.strawberry, 54, 152 + bob, false, 3);
-    if ((this.t >> 3) % 4 === 0) r.spr(SPR.sparkle, 50, 150);
-    if ((this.t >> 3) % 4 === 2) r.spr(SPR.sparkle, 88, 176);
-
+    // Santiago driving his tractor back and forth
+    const lap = 400, k = this.t % lap, half = lap / 2;
+    const going = k < half;
+    const x = -64 + ((going ? k : lap - k) / half) * 192;
+    r.spr(SPR.tractor[(this.t >> 3) % 2], x, 146 - ((this.t >> 3) % 2), !going, 2);
     drawButton(r, PLAY);
     r.textC('A GAME BY SANTIAGO', 72, 236, 'W', 1, 'T');
     r.text(VERSION, 3, 249, 'T');

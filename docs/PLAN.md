@@ -13,6 +13,9 @@ His first drawing (`docs/seed-packet-drawing.jpg`) is a seed packet: **Legendary
 3. Coins fill the NEW SEED bar. When it's full, open SEEDS and buy the next packet → packet-opening moment again.
 4. Extras: the Legendary Strawberry sometimes grows golden (worth more), a rain cloud waters everything now and then, plants keep growing while the game is closed.
 
+## Stage 2 - the tractor
+He wants to ride a tractor like the picture on our wall (`docs/tractor-picture.jpg`): red body, yellow wheels, big back wheel, black + red smokestacks. Santiago (red cap, blue shirt) drives it. Tap plots → they queue up (yellow outline) → he drives to each in order and plants/waters/picks on arrival → parks by the barn when idle. Also drives back and forth on the title screen.
+
 ## Approach
 - Reuse Sophia's Garden engine (canvas 144x256, palette, pixel font, chiptune sound, save, PWA/offline).
 - Tap-only input - no D-pad.
@@ -20,7 +23,8 @@ His first drawing (`docs/seed-packet-drawing.jpg`) is a seed packet: **Legendary
 
 ## Open questions for Santiago
 - Is strawberry the only Legendary? Do the others have rarities too (common/rare/epic)?
-- Is there a farmer (him?) or a pet on the farm?
+- What does he look like (hair, cap color, shirt)? Defaults: brown hair, red cap, blue shirt.
+- The picture has a dog, a cat and chickens - want them on the farm? A wreath on the tractor for Christmas?
 - What's special about the Cherry Pit (he circled it big)?
 - Animals? A bigger farm? Selling at a market?
 
