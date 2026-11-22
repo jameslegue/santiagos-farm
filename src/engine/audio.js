@@ -44,5 +44,7 @@ export const sfx = {
   select: () => tone(660, 0.05, { vol: 0.04 }),
   rip: () => tone(1200, 0.25, { to: 200, type: 'sawtooth', vol: 0.02 }),
   reveal: () => notes([523, 659, 784, 1047, 784, 1047, 1319], 0.08),
+  hero: () => notes([392, 523, 659, 784, 659, 784], 0.07, { type: 'square', vol: 0.04 }),
+  stomp: () => tone(120, 0.18, { to: 40, type: 'square', vol: 0.08 }),
   rain: () => notes([1568, 1319, 1760, 1175, 1568], 0.05, { type: 'sine', vol: 0.03 }),
 };

@@ -1,5 +1,6 @@
 import { CROP, CROP_DARK, SPR } from '../sprites.js';
 import { CROPS } from '../crops.js';
+import { HERO_FACE } from '../heroes.js';
 
 // Seed packets look like Santiago's drawing: a white packet with a hanging hole at the top,
 // the seed's number in a circle and green writing.
@@ -39,6 +40,7 @@ export function drawSmallPacket(r, x, y, w, h, crop, { state = 'open', selected 
     r.textC('?', x + w / 2, y + 18, 'W', 2, 'K');
     return;
   }
+  r.spr(HERO_FACE[crop.id], x + w - 17, y + 2);
   r.textC(crop.name, x + w / 2 + 1, y + h - 15, 'G');
   r.textC(crop.word, x + w / 2 + 1, y + h - 8, 'G');
 }

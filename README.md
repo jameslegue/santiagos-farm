@@ -4,15 +4,19 @@ An 8-bit farming game designed by Santiago. Built for phones (portrait), made fo
 
 It starts with a **Legendary Strawberry Seed** packet (straight from his drawing - `docs/seed-packet-drawing.jpg`). Plant it, water it, pick it, earn coins, and buy the next seed packet. Collect all 9 in his order:
 
-1. Strawberry (Legendary - sometimes grows a golden one!)
-2. Raspberry
-3. Apple (tree)
-4. Broccoli
-5. Cherry Pit (tree)
-6. Blackberry
-7. Carrot
-8. Tomato
-9. Lettuce
+| # | Seed | Superhero | Power |
+|---|---|---|---|
+| 1 | Strawberry (Legendary - sometimes grows golden!) | Strawberry Swing | Swings on vines |
+| 2 | Raspberry | Razz-Bot | Rocket boots |
+| 3 | Apple (tree) | Captain Apple | Flies super fast |
+| 4 | Broccoli | Broc Smash | Super stomp |
+| 5 | Cherry Pit (tree) | Cherry Cat | Super pounce |
+| 6 | Blackberry | Night Berry | Glides in the dark |
+| 7 | Carrot | Captain Carrot | X-ray eyes |
+| 8 | Tomato | Ketchup Kid | Ketchup splat |
+| 9 | Lettuce | Captain Iceberg | Ice power |
+
+Each seed has its own superhero (original characters made for this game). The hero jumps out when you open their packet, zooms across the farm when their crop gets ripe, and lives on the **MY HEROES** page (SEEDS → HEROES).
 
 Santiago drives his red tractor around the farm (like the picture on the wall - `docs/tractor-picture.jpg`) and does all the work.
 
@@ -44,10 +48,12 @@ Offline: `sw.js` caches the game so it works from the home screen with no signal
 Same engine as Sophia's Garden - plain JavaScript modules + an HTML canvas at 144x256, scaled up in whole pixels so it stays crisp. One 16-color palette (`src/engine/palette.js`), all art is text grids of palette letters (`src/sprites.js`).
 
 - **Seeds are data:** `src/crops.js` - order, price, grow time and sell value for each seed. Tweak the numbers there to make the game faster/slower.
-- `src/scenes/` - `title.js`, `farm.js` (tractor, plant/water/pick, rain), `seeds.js` (packet picker + shop), `packet.js` (rip open a new packet)
+- **Heroes are data:** `src/heroes.js` - name, power, how they cross the farm (fly, swing, stomp, run) and their pixel art
+- `src/scenes/` - `title.js`, `farm.js` (tractor, plant/water/pick, rain, hero fly-bys), `heroes.js` (My Heroes page), `seeds.js` (packet picker + shop), `packet.js` (rip open a new packet)
 - `src/ui/packet.js` - the seed packet look from his drawing (hang hole, circled number, green writing, LEGENDARY down the side)
 
 ## Roadmap
 1. ✅ The farm - 9 seeds in his order, Legendary Strawberry packet, plant/water/pick, coins, buy packets, golden strawberries, rain, sound, offline install
 2. ✅ Santiago on his red tractor - drives to each plot you tap
-3. His next drawing - ideas to ask him about: the dog, cat and chickens from the tractor picture, a Christmas wreath on the tractor, animals, a bigger farm, sprinklers, a market to sell at, what the other seeds' rarities are
+3. ✅ A superhero for every seed - packet reveal, farm fly-bys, My Heroes page
+4. His next drawing - ideas to ask him about: the dog, cat and chickens from the tractor picture, a Christmas wreath on the tractor, animals, a bigger farm, sprinklers, a market to sell at, what the other seeds' rarities are

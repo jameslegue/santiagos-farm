@@ -16,6 +16,9 @@ His first drawing (`docs/seed-packet-drawing.jpg`) is a seed packet: **Legendary
 ## Stage 2 - the tractor
 He wants to ride a tractor like the picture on our wall (`docs/tractor-picture.jpg`): red body, yellow wheels, big back wheel, black + red smokestacks. Santiago (red cap, blue shirt) drives it. Tap plots → they queue up (yellow outline) → he drives to each in order and plants/waters/picks on arrival → parks by the barn when idle. Also drives back and forth on the title screen.
 
+## Stage 3 - superheroes
+Santiago wants a superhero for each seed. We made original fruit heroes (no licensed characters - public repo), keeping the kind of power he picked for each: Strawberry Swing, Razz-Bot, Captain Apple, Broc Smash, Cherry Cat, Night Berry, Captain Carrot, Ketchup Kid, Captain Iceberg. Each one jumps out of their seed packet, crosses the farm when their crop ripens (fly / swing / stomp / run), shows on their packet, and has a card on the My Heroes page. He can rename or recolor any of them in `src/heroes.js`.
+
 ## Approach
 - Reuse Sophia's Garden engine (canvas 144x256, palette, pixel font, chiptune sound, save, PWA/offline).
 - Tap-only input - no D-pad.

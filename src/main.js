@@ -7,6 +7,7 @@ import { TitleScene } from './scenes/title.js';
 import { FarmScene, emptyPlots } from './scenes/farm.js';
 import { SeedsScene } from './scenes/seeds.js';
 import { PacketScene } from './scenes/packet.js';
+import { HeroesScene } from './scenes/heroes.js';
 import { CROPS } from './crops.js';
 
 const canvas = document.getElementById('game');
@@ -46,6 +47,7 @@ const game = {
   toTitle() { this.go(new TitleScene(this)); },
   openFarm() { this.go(new FarmScene(this)); },
   openSeeds() { this.go(new SeedsScene(this)); },
+  openHeroes() { this.go(new HeroesScene(this)); },
   openPacket(crop) { this.go(new PacketScene(this, crop)); },
   reset() { this.progress = structuredClone(NEW_GAME); this.saveProgress(); this.toTitle(); },
 };

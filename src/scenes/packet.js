@@ -1,6 +1,7 @@
 import { CROP, SPR } from '../sprites.js';
 import { sfx } from '../engine/audio.js';
 import { drawBigPacket } from '../ui/packet.js';
+import { HEROES, HERO } from '../heroes.js';
 
 // A new seed packet! It drops in, you tap to rip it open, and the seed pops out.
 const PX = 20, PY = 50;
@@ -25,7 +26,7 @@ export class PacketScene {
       setTimeout(() => sfx.reveal(), 250);
     } else if (this.phase === 'open') {
       this.openT++;
-      if (this.openT > 50 && input.tapped) {
+      if (this.openT > 60 && input.tapped) {
         this.game.progress.started = true;
         this.game.saveProgress();
         sfx.blip();
@@ -56,9 +57,9 @@ export class PacketScene {
       if ((this.t >> 4) % 2) r.textC('TAP TO OPEN!', 72, 222, 'W', 2, 'K');
     }
     if (this.phase === 'open') {
-      // seed pops out of the packet and floats up big
+      // seed pops out of the packet and floats up
       const k = Math.min(1, this.openT / 30);
-      const s = 2 + Math.round(k * 3);
+      const s = 2 + Math.round(k * 1);
       const sz = 12 * s;
       const iy = PY + 40 - k * 50 + Math.sin(this.openT / 8) * 2;
       r.spr(CROP[this.crop.id], 72 - sz / 2, iy, false, s);
@@ -67,7 +68,18 @@ export class PacketScene {
         if ((this.openT >> 2) % 2 === i % 2) r.spr(SPR.sparkle, 70 + Math.cos(a) * (sz / 2 + 10), iy + sz / 2 + Math.sin(a) * (sz / 2 + 10));
       }
       if (this.openT > 20) r.textC(this.crop.legendary ? 'LEGENDARY!' : 'NEW SEED!', 72, 14, 'Y', 2, 'K');
-      if (this.openT > 50 && (this.openT >> 4) % 2) r.textC('TAP TO PLANT!', 72, 226, 'W', 2, 'K');
+      // ...and out jumps the seed's superhero!
+      if (this.openT > 30) {
+        const h = HEROES[this.crop.id];
+        const j = Math.min(1, (this.openT - 30) / 15);
+        const hy = 150 - j * 70 - Math.sin(j * Math.PI) * 20 + (j === 1 ? Math.sin(this.openT / 10) * 2 : 0);
+        r.spr(HERO[this.crop.id], 40, hy, false, 4);
+        if (this.openT === 31) sfx.hero();
+        r.box(4, 186, 136, 26, 'K', 'Y');
+        r.textC(h.name, 72, 190, 'Y', 2);
+        r.textC(h.power, 72, 204, 'W');
+      }
+      if (this.openT > 60 && (this.openT >> 4) % 2) r.textC('TAP TO PLANT!', 72, 226, 'W', 2, 'K');
     }
   }
 }

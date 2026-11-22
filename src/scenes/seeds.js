@@ -9,7 +9,8 @@ import { SPR } from '../sprites.js';
 // tap the next one to buy it with coins.
 const W = 44, H = 56;
 const slot = (i) => ({ x: 4 + (i % 3) * (W + 2), y: 24 + Math.floor(i / 3) * (H + 4), w: W, h: H });
-const BACK = { x: 32, y: 210, w: 80, h: 24, label: 'FARM' };
+const BACK = { x: 4, y: 210, w: 66, h: 24, label: 'FARM' };
+const HEROES_BTN = { x: 74, y: 210, w: 66, h: 24, label: 'HEROES' };
 
 export class SeedsScene {
   constructor(game) {
@@ -24,6 +25,7 @@ export class SeedsScene {
     this.t++;
     this.shake.t--;
     if (tapped(input, BACK)) { sfx.blip(); this.game.openFarm(); return; }
+    if (tapped(input, HEROES_BTN)) { sfx.blip(); this.game.openHeroes(); return; }
     CROPS.forEach((crop, i) => {
       const s = slot(i);
       if (!input.tapIn(s.x, s.y, s.w, s.h)) return;
@@ -67,5 +69,6 @@ export class SeedsScene {
       }
     });
     drawButton(r, BACK);
+    drawButton(r, HEROES_BTN, { fill: 'R', border: 'O' });
   }
 }

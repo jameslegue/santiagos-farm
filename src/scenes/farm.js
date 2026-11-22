@@ -5,6 +5,7 @@ import { playSong } from '../engine/music.js';
 import { circledNumber } from '../ui/packet.js';
 import { drawSky, drawSoundButton, SOUND_BTN, drawCoins, COIN_BOX } from '../ui/hud.js';
 import { tapped } from '../ui/button.js';
+import { HEROES, HERO } from '../heroes.js';
 
 // The farm: tap dirt to plant, tap a thirsty plant to water it, tap a ripe one to pick it.
 const COLS = 3, ROWS = 4;
@@ -34,6 +35,9 @@ export class FarmScene {
     // Santiago drives his tractor to each plot you tap, in order, and does the job there.
     this.tractor = { x: HOME.x, y: HOME.y, flip: false, moving: false, idle: 0, wheel: 0 };
     this.queue = [];
+    // When a crop gets ripe, its superhero zooms across the farm.
+    this.hero = null;
+    this.heroWait = 0;
     playSong('farm');
   }
 
@@ -53,6 +57,7 @@ export class FarmScene {
       pl.wet = false;
       if (pl.stage === 3 && cropById(pl.crop).legendary && Math.random() < GOLD_CHANCE) pl.gold = true;
       this.pop(i, pl.stage === 3 ? 'ripe' : 'grow');
+      if (pl.stage === 3) this.callHero(pl.crop);
       this.save();
     });
 
@@ -68,6 +73,7 @@ export class FarmScene {
     this.updateTractor(now);
 
     this.updateRain(now);
+    this.updateHero();
     this.fx = this.fx.filter((f) => { f.t++; return f.t < f.life; });
     if (this.shownCoins < this.p.coins) this.shownCoins = Math.min(this.p.coins, this.shownCoins + Math.max(1, Math.ceil((this.p.coins - this.shownCoins) / 10)));
     else this.shownCoins = this.p.coins;
@@ -93,6 +99,42 @@ export class FarmScene {
     if (Math.abs(dx) > 1) tr.flip = dx < 0;
     tr.moving = true;
     tr.wheel++;
+  }
+
+  callHero(crop) {
+    if (this.hero || this.heroWait > 0) return;
+    this.hero = { crop, ...HEROES[crop], t: 0, x: -40, y: 80 };
+    this.heroWait = 60 * 8;
+    sfx.hero();
+  }
+
+  updateHero() {
+    if (this.heroWait > 0) this.heroWait--;
+    const h = this.hero;
+    if (!h) return;
+    const t = ++h.t;
+    if (h.move === 'fly') { h.x = -40 + t * 1.6; h.y = 66 + Math.sin(t / 14) * 10; }
+    else if (h.move === 'swing') {
+      // swings from vine to vine: each swing is an arc hanging from a point at the top
+      const k = (t % 50) / 50;
+      h.px = -20 + Math.floor(t / 50) * 50 + 25;
+      h.x = h.px - 25 * Math.cos(k * Math.PI) - 16;
+      h.y = FIELD_TOP + 4 + Math.sin(k * Math.PI) * 40;
+    } else if (h.move === 'stomp') {
+      h.x = -40 + t * 1.2;
+      const hop = Math.abs(Math.sin(t / 12));
+      h.y = 156 - hop * 36;
+      if (hop < 0.13 && h.landed !== Math.floor(t / 37.7)) {
+        h.landed = Math.floor(t / 37.7);
+        sfx.stomp();
+        for (let k = 0; k < 6; k++) this.fx.push({ kind: 'dirt', x: h.x + 16, y: h.y + 36, vx: (k - 2.5) * 0.6, vy: -1 - Math.random(), t: 0, life: 20 });
+      }
+    } else { // run
+      h.x = -40 + t * 1.7;
+      h.y = 154 - Math.abs(Math.sin(t / 6)) * 8;
+    }
+    if (t % 4 === 0) this.fx.push({ kind: 'trail', x: h.x + 16, y: h.y + (h.move === 'run' || h.move === 'stomp' ? 34 : 24), c: h.trail, t: 0, life: h.crop === 'tomato' ? 90 : 24 });
+    if (h.x > 160) this.hero = null;
   }
 
   tapPlot(i, now) {
@@ -198,6 +240,11 @@ export class FarmScene {
     }
 
     this.drawFx(r);
+    if (this.hero) {
+      const h = this.hero;
+      if (h.move === 'swing') for (let k = 0; k <= 10; k++) r.rect(h.px + (h.x + 16 - h.px) * k / 10, FIELD_TOP - 6 + (h.y - FIELD_TOP + 6) * k / 10, 1, 1, 'G');
+      r.spr(HERO[h.crop], h.x, h.y, false, 2);
+    }
     this.drawBar(r);
 
     const h = this.hint();
@@ -259,6 +306,9 @@ export class FarmScene {
         const tx = COIN_BOX.x + 4, ty = COIN_BOX.y;
         const e = k * k;
         r.spr(f.gold ? CROP_GOLD : CROP[f.crop], f.x + (tx - f.x) * e, f.y + (ty - f.y) * e - Math.sin(k * Math.PI) * 20);
+      } else if (f.kind === 'trail') {
+        const sz = f.c === 'R' ? 3 : 2; // Ketchup Kid leaves splats
+        if (f.c === 'R' || (f.t >> 2) % 2 === 0) r.rect(f.x, f.y + (f.c === 'R' ? 0 : f.t / 3), sz, sz, f.c);
       } else if (f.kind === 'text') {
         r.textC(f.text, f.x, f.y - f.t / 2, f.c, 1, 'K');
       }
