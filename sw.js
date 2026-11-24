@@ -1,9 +1,19 @@
 // Lets the game run offline from the home screen.
 // Always asks GitHub for the newest files first (so a new version shows up right away),
 // and falls back to the saved copy only when there's no signal.
-const CACHE = 'santiagos-farm-v4';
+const CACHE = 'santiagos-farm-v5';
 const FILES = [
   './',
+  './3d/',
+  './3d/controls.js',
+  './3d/farm.json',
+  './3d/hud.js',
+  './3d/index.html',
+  './3d/main.js',
+  './3d/models.js',
+  './3d/textures.js',
+  './3d/voxels.js',
+  './3d/world.js',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './index.html',
@@ -29,6 +39,7 @@ const FILES = [
   './src/ui/hud.js',
   './src/ui/packet.js',
   './src/version.js',
+  './vendor/three.module.min.js',
 ];
 
 self.addEventListener('install', (e) => {

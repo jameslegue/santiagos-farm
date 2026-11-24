@@ -44,6 +44,15 @@ Testing shortcuts: `?reset` wipes the save, `?coins=500` sets coins.
 
 Offline: `sw.js` caches the game so it works from the home screen with no signal. It always tries the network first, so updates show up right away. If you add new files, add them to the list in `sw.js` too.
 
+## 3D farm (`/3d`)
+Tap **3D!** on the title screen. A blocky 3D version of the farm - same save, so it's the same coins, seeds and plots as the 2D game.
+- Santiago drives his tractor around the farm. **Drive onto a dirt plot** and he does the job: plant, water or pick. Drive off and back on for the next step
+- **SEED** button switches seeds, **NEW!** shows up when you can buy the next packet
+- Heroes run, stomp, swing or fly across when their crop is ripe
+- Phone: left side of the screen = joystick, right side = drag to look. Computer: WASD/arrows to drive, Q/E or drag to look
+
+Built with [Three.js](https://threejs.org) (MIT license, copied into `vendor/` so it works offline), same approach as Sophia's Garden 3D. The farm layout is `3d/farm.json` - block boxes `[x, y, z, width, height, depth, type]`. Models are built from the 2D pixel art.
+
 ## How it's built
 Same engine as Sophia's Garden - plain JavaScript modules + an HTML canvas at 144x256, scaled up in whole pixels so it stays crisp. One 16-color palette (`src/engine/palette.js`), all art is text grids of palette letters (`src/sprites.js`).
 

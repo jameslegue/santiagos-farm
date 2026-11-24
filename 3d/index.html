@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Santiago's Farm 3D</title>
+<meta name="theme-color" content="#1a1c2c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../icons/icon-192.png">
+<style>
+  html, body { margin: 0; height: 100%; background: #41a6f6; overflow: hidden; overscroll-behavior: none; }
+  body { position: fixed; inset: 0; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; font: bold 16px ui-monospace, monospace; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; image-rendering: pixelated; image-rendering: crisp-edges; touch-action: none; }
+  #hud { pointer-events: none; }
+  .btn {
+    position: absolute; right: 16px; width: 100px; border: 4px solid #a7f070; border-radius: 0; background: #38b764dd; color: #f4f4f4;
+    font: inherit; font-size: 15px; box-shadow: inset -5px -5px 0 #257179; touch-action: none; -webkit-tap-highlight-color: transparent;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 6px 0;
+  }
+  .btn img { width: 48px; height: 48px; image-rendering: pixelated; }
+  .btn.on { box-shadow: inset 5px 5px 0 #257179; }
+  #seed { bottom: calc(20px + env(safe-area-inset-bottom)); }
+  #buy { bottom: calc(150px + env(safe-area-inset-bottom)); display: none; border-color: #ffcd75; background: #b13e53dd; box-shadow: inset -5px -5px 0 #5d275d; animation: pulse 0.8s infinite alternate; }
+  @keyframes pulse { to { transform: scale(1.06); } }
+  #joy { position: absolute; display: none; width: 110px; height: 110px; margin: -55px 0 0 -55px; border: 4px solid #a7f070aa; background: #38b76455; pointer-events: none; }
+  #knob { position: absolute; left: 30px; top: 30px; width: 42px; height: 42px; background: #a7f070; box-shadow: inset -4px -4px 0 #257179; }
+  #back { position: absolute; right: 6px; top: calc(4px + env(safe-area-inset-top)); padding: 2px 8px; border: 3px solid #a7f070; background: #257179; color: #f4f4f4; text-decoration: none; font-size: 13px; }
+</style>
+</head>
+<body>
+  <canvas id="view"></canvas>
+  <canvas id="hud"></canvas>
+  <div id="joy"><div id="knob"></div></div>
+  <button id="buy" class="btn"><img alt=""><span>NEW!</span></button>
+  <button id="seed" class="btn"><img alt=""><span>SEED</span></button>
+  <a id="back" href="../">2D FARM</a>
+  <script>
+    // Same iPhone zoom protection as the 2D game.
+    (() => {
+      const stop = (e) => e.preventDefault();
+      ['gesturestart', 'gesturechange', 'gestureend', 'dblclick'].forEach((t) => document.addEventListener(t, stop, { passive: false }));
+      document.addEventListener('touchmove', stop, { passive: false });
+      let last = 0;
+      document.addEventListener('touchend', (e) => { const now = Date.now(); if (now - last < 400) e.preventDefault(); last = now; }, { passive: false });
+    })();
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js').catch(() => {});
+  </script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

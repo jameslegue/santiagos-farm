@@ -396,3 +396,11 @@ for (const [id, rows] of Object.entries(CROP_ART)) {
   CROP_DARK[id] = makeSprite(rows, {}, 'E');
 }
 export const CROP_GOLD = makeSprite(CROP_ART.strawberry, { R: 'Y', Y: 'O' });
+
+// The raw text art, for the 3D version (it builds blocks from these).
+export const ROWS = {
+  TRACTOR: [TRACTOR_0, TRACTOR_1],
+  CROP: CROP_ART,
+  CROP_GOLD: CROP_ART.strawberry.map((r) => r.replace(/[RY]/g, (c) => (c === 'R' ? 'Y' : 'O'))),
+  MOUND, SPROUT, BUSH, TREE, DROP, COIN,
+};
