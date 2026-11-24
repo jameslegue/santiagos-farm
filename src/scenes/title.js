@@ -8,6 +8,7 @@ import { playSong } from '../engine/music.js';
 import { VERSION } from '../version.js';
 
 const PLAY = { x: 32, y: 196, w: 80, h: 28, label: 'PLAY' };
+const TRY_3D = { x: 3, y: 3, w: 30, h: 13 };
 
 export class TitleScene {
   constructor(game) {
@@ -19,6 +20,7 @@ export class TitleScene {
   update() {
     const input = this.game.input;
     this.t++;
+    if (tapped(input, TRY_3D)) { location.href = '3d/'; return; }
     if (tapped(input, SOUND_BTN)) { this.game.setMuted(!this.game.settings.muted); sfx.select(); return; }
     if (tapped(input, PLAY) || input.enter) {
       sfx.blip();
@@ -30,6 +32,8 @@ export class TitleScene {
   draw(r) {
     drawSky(r, this.t);
     drawSoundButton(r, this.game.settings.muted);
+    r.box(TRY_3D.x, TRY_3D.y, TRY_3D.w, TRY_3D.h, 'B', 'Y');
+    r.textC('3D!', TRY_3D.x + TRY_3D.w / 2 + 1, TRY_3D.y + 4, 'Y');
     r.rect(0, 58, r.W, r.H - 58, 'G');
     for (let y = 61; y < r.H; y += 7) for (let x = (y * 7) % 11; x < r.W; x += 13) r.rect(x, y, 1, 2, 'L');
 
